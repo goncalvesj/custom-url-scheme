@@ -1,0 +1,4 @@
+client-app/**/bin
+client-app/**/obj
+.vs
+**.user
