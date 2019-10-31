@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 using System.Text.Json;
@@ -9,35 +10,34 @@ namespace ClientApp
 	{
 		public string Name { get; set; }
 	}
-	internal static class Program
+    internal static class Program
 	{
 		private static void Main(string[] args)
 		{
 			try
 			{
-				// put all code in here ...
-				Console.WriteLine("Client-App invoked");
-				Console.WriteLine("Arguments:");
-
-				foreach (var s in args)
-				{
-					var cleanString = CleanArguments(s);
-					Console.WriteLine(cleanString);
-
-					var decoded = System.Web.HttpUtility.UrlDecode(cleanString);
-					Console.WriteLine(decoded);
-
-					//var token = JToken.Parse(decoded);
-					//var json = JObject.Parse((string)token);
-					//Console.WriteLine(json);
-					var byteArray = Convert.FromBase64String(decoded);
-					var jsonBack = Encoding.UTF8.GetString(byteArray);
-					//var accountBack = JsonConvert.DeserializeObject<ExternalAccount>(jsonBack);
-
-					Console.WriteLine(jsonBack);
-
-					var d = JsonSerializer.Deserialize("{name:joao}", typeof(DataObject));
-				}
+                // put all code in here ...
+                Console.WriteLine("Client-App invoked");
+				Console.WriteLine("Argument: "+ args[0]);
+                var cleanedString = CleanArguments(args[0]);
+                var customerArgs = cleanedString.Split("%20");
+                var decoded = System.Web.HttpUtility.UrlDecode(customerArgs[1]);
+                switch (int.Parse(customerArgs[0]))
+                {
+                    case 1:
+                        Console.WriteLine(customerArgs[1]);
+                        break;
+                    case 2:
+                        Console.WriteLine(decoded);
+                        var deserializedProduct = JsonConvert.DeserializeObject<DataObject>(decoded);
+                        Console.WriteLine(deserializedProduct.Name);
+                        break;
+                    case 3:
+                        var byteArray = Convert.FromBase64String(decoded);
+                        var jsonBack = Encoding.UTF8.GetString(byteArray);
+                        Console.WriteLine(jsonBack);
+                        break;
+                }
 
 				Console.WriteLine("Press any key to continue...");
 				Console.ReadLine();
