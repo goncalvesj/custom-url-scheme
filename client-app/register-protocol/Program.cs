@@ -5,20 +5,19 @@ namespace Register_Protocol
 {
     class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine(args[0]);
-            if (args.Length < 2)
-            {
-                Console.WriteLine("Registering protocol requires two arguements.");
-                Console.WriteLine("Argument1: Scheme name.");
-                Console.WriteLine("Argument2: Protocol name.");
-                return 1;
-            }
+			const string protocol = "clientapp";
+			const string desc = "My Desktop App";
 
-            RegisterUriScheme(args[0], args[1]);
+			Console.WriteLine("Registering protocol...");
+			Console.WriteLine($"Scheme name: {protocol}");
+			Console.WriteLine($"Description: {desc}.");
 
-            return 0;
+			RegisterUriScheme(protocol, desc);
+
+			Console.WriteLine("Please press any key to continue...");
+			Console.ReadLine();
         }
 
         public static void RegisterUriScheme(string uriScheme, string friendlyName)
@@ -29,7 +28,7 @@ namespace Register_Protocol
                 key.SetValue("URL Protocol", "");
                 var exeLocation = AppDomain.CurrentDomain.BaseDirectory;
                 var indexOfPathNeeded = exeLocation.IndexOf("register-protocol");
-                var path = exeLocation.Substring(0, indexOfPathNeeded) + "client-app\\bin\\Release\\netcoreapp3.0\\win-x64\\Client-App.exe";
+                var path = exeLocation.Substring(0, indexOfPathNeeded) + "client-app\\bin\\Debug\\netcoreapp3.0\\win-x64\\Client-App.exe";
                 using (var defaultIcon = key.CreateSubKey("DefaultIcon"))
                 {
                     defaultIcon.SetValue("", path + ",1");
