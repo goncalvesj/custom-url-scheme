@@ -1,42 +1,58 @@
-# Publish .NET Core App
+# Requirements
 
-Because it's a .NET Core 3 console application it needs to be published first as a "self-contained" application to generate an .exe file.
+- Windows
+- .NET Core CLI
+- .NET Core 3.0
 
-Run the below command and retrieve the .exe location
+# Contents
 
+### client-app/client-app folder
+Custom console application that will respond to the custom url
+
+### client-app/register-protocol folder
+Console application that will add the custom url scheme to windows registry
+
+### registry/sample.reg
+Example registry file that can be used to register the custom url
+
+### website/index.html
+Test website to execute the custom url with params
+
+Params types:
+- string
+- json string
+- base64 encoded json string
+
+# Steps
+
+## Add to registry and publish console app
+The .NET Core 3 console application it needs to be published first as a "self-contained" application to generate an .exe file.
+Execute the following powershell script
 ```
-dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true
+installapps.ps1
 ```
+OR
+1. Open Visual Studio 2019
+2. Run Register-Protocol project
+3. Publish Client-App project using the existing FolderProfile
 
-# Add Key to Registry
-
-Open the sample.reg file.
-
-Replace
-C:\\Program Files\\YourApp\\YourApp.exe\
-with the .exe location you retrieved earlier.
-
-Run the registry file in the registry folder.
-It will create the following entry in the Windows Registry.
+# Confirm registry was created
+Win+R and type 
+```
+regedit
+```
+The following entry in the Windows Registry should be in place.
 
 ```
 HKEY_CLASSES_ROOT
-   sample
-      (Default) = "URL:Sample Protocol"
-      URL Protocol = ""
-      DefaultIcon
-         (Default) = "sample.exe,1"
-      shell
-         open
-            command
-               (Default) = "C:\Program Files\Sample\sample.exe" "%1"
+   clientapp
 ```
 
-# Website
+# Test the Custom URL
 
-Open index.html
+Open index.html in any browser
 
-Click the open app button
+Click any of the buttons
 
 A prompt should appear to open you desktop app
 
